@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#1a0a10" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+  <title>دعوة تخرج - حور</title>
+
+  <!-- Arabic fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Arabic:wght@300;400&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+
+    /* ══════════════════════════════════════════════
+       RESET
+    ══════════════════════════════════════════════ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+
+    html {
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      overflow: hidden;
+      overflow-x: hidden;
+      overscroll-behavior: none;
+    }
+
+    body {
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      overflow: hidden;
+      overflow-x: hidden;
+      background: #1a0a10;
+      overscroll-behavior: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* ══════════════════════════════════════════════
+       PAGE 1 – COVER (الختم) — لا يتغير
+    ══════════════════════════════════════════════ */
+    #page1 {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      z-index: 20;
+      touch-action: none;
+      will-change: opacity;
+      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #page1.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* صورة الغلاف */
+    #cover-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      height: 100vh;
+      height: 100dvh;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-drag: none;
+      transform-origin: 50% 38%;
+      will-change: transform;
+      animation: sealBreathe 3.6s ease-in-out infinite;
+    }
+    @keyframes sealBreathe {
+      0%,  100% { transform: scale(1);     }
+      50%        { transform: scale(1.022); }
+    }
+
+    /* مناطق الضغط الشفافة */
+    .hotspot {
+      position: absolute;
+      background: transparent;
+      cursor: pointer;
+      touch-action: manipulation;
+      outline: none;
+      border: none;
+    }
+    /* Fallback — JS يحسب الموضع الدقيق */
+    #seal-zone { top: 22%; left: 29%; width: 42%; height: 38%; }
+    #text-zone { top: 61%; left: 14%; width: 72%; height: 10%; min-height: 44px; }
+
+    /* ══════════════════════════════════════════════
+       PAGE 2 – محتوى الدعوة (قابل للتمرير)
+    ══════════════════════════════════════════════ */
+    #page2 {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%; height: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      will-change: opacity;
+      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+      /* خلفية احتياطية للتمرير بين الأقسام */
+      background: #1a0a10;
+    }
+    #page2.fade-in {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION 1 – قسم الفيديو
+    ══════════════════════════════════════════════ */
+    #section-video {
+      position: relative;
+      width: 100%;
+      /* يغطي الشاشة كاملة */
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      /* خلفية وردية احتياطية بينما يُحمَّل الفيديو */
+      background: #c8809a;
+    }
+
+    /* ── فيديو الخلفية ── */
+    #bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      /* إخفاء أزرار التحكم في كل المتصفحات */
+      -webkit-media-controls: none;
+    }
+    /* إخفاء شريط التحكم في WebKit/Blink */
+    #bg-video::-webkit-media-controls,
+    #bg-video::-webkit-media-controls-enclosure,
+    #bg-video::-webkit-media-controls-panel,
+    #bg-video::-webkit-media-controls-play-button,
+    #bg-video::-webkit-media-controls-start-playback-button {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* شاشات صغيرة: شدّ الفيديو للملء الكامل عرضاً */
+    @media (max-aspect-ratio: 16/9) {
+      #bg-video {
+        width: auto;
+        height: 100%;
+        min-width: 100%;
+      }
+    }
+
+    /* ── طبقة التدرج الشفافة ── */
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 240, 248, 0.18)  0%,
+        rgba(210, 140, 175, 0.30) 38%,
+        rgba(120,  50,  80, 0.50) 78%,
+        rgba( 80,  20,  45, 0.68) 100%
+      );
+    }
+
+    /* ── طبقة المحتوى النصي ── */
+    .video-content {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 52px 36px 96px;
+      text-align: center;
+      gap: 14px;
+      direction: rtl;
+    }
+
+    /* ─ النص التمهيدي: "تعالت في بيتنا..." ─ */
+    .text-intro {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(20px, 5.2vw, 23px);
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.97);
+      line-height: 1.95;
+      text-shadow:
+        0 1px 10px rgba(70, 15, 40, 0.38),
+        0 2px 20px rgba(70, 15, 40, 0.18);
+    }
+
+    /* ─ فاصل زخرفي ─ */
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.50);
+      font-size: 10px;
+      letter-spacing: 5px;
+      margin: 2px 0;
+    }
+    .hero-divider::before,
+    .hero-divider::after {
+      content: '';
+      display: block;
+      width: 44px;
+      height: 1px;
+      background: linear-gradient(
+        to var(--dir, right),
+        transparent,
+        rgba(255, 255, 255, 0.45),
+        transparent
+      );
+    }
+    .hero-divider::before { --dir: left; }
+
+    /* ─ نص السبب: "ولأن الفرح يزدان..." ─ */
+    .text-reason {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(17px, 4.4vw, 20px);
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.95;
+      text-shadow: 0 1px 10px rgba(70, 15, 40, 0.30);
+      margin-top: 16px;
+    }
+
+    /* ─ نص الدعوة: "يسرّنا دعوتكم..." ─ */
+    .text-invite {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(17px, 4.4vw, 20px);
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.95;
+      text-shadow: 0 1px 8px rgba(70, 15, 40, 0.28);
+      margin-top: 16px;
+    }
+
+    /* ─ اسم الحفل: "حفل تخرّج ابنتنا" ─ */
+    .text-event {
+      font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+      font-size: clamp(16px, 4.2vw, 19px);
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      text-shadow: 0 1px 10px rgba(70, 15, 40, 0.32);
+      margin-top: 20px;
+    }
+
+    /* ─ الاسم حُور — العنصر الأكبر ─ */
+    .hero-name {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(58px, 15vw, 68px);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.0;
+      letter-spacing: 0.04em;
+      text-shadow:
+        0  2px 16px rgba( 90, 20, 50, 0.50),
+        0  6px 40px rgba( 90, 20, 50, 0.28);
+      margin-top: 2px;
+    }
+
+    /* ── مؤشر السحب: استُبدل بـ .ribbon-footer الموحد ── */
+
+    /* ══════════════════════════════════════════════
+       REVEAL ANIMATION – ظهور النص
+    ══════════════════════════════════════════════ */
+    .text-animate {
+      opacity: 0;
+      transform: translateY(22px);
+      transition:
+        opacity   1.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    /* تأخير كل عنصر يُحدَّد بـ inline style في HTML */
+
+    #section-video.content-visible .text-animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ══════════════════════════════════════════════
+       REDUCED MOTION
+    ══════════════════════════════════════════════ */
+    @media (prefers-reduced-motion: reduce) {
+      #cover-img    { animation: none; }
+      .text-animate { transition: opacity 0.4s ease; transform: none !important; }
+    }
+
+    /* ══════════════════════════════════════════════
+       شاشات صغيرة (iPhone SE 375×667)
+    ══════════════════════════════════════════════ */
+    @media screen and (max-height: 700px) {
+      .video-content { gap: 8px;   padding: 38px 28px 88px; }
+      .text-intro    { font-size: 18px; line-height: 1.85; }
+      .text-reason   { font-size: 16px; line-height: 1.80; margin-top: 10px; }
+      .text-invite   { font-size: 16px; line-height: 1.80; margin-top: 10px; }
+      .text-event    { font-size: 14px; margin-top: 12px; }
+      .hero-name     { font-size: 50px; }
+    }
+
+
+    /* ══════════════════════════════════════════════
+       SECTION 2 – موعد الحفل (القسم الأبيض)
+    ══════════════════════════════════════════════ */
+    #section-date {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #FFFCFD;
+    }
+
+    /* ── زخارف الزوايا ── */
+    .date-corner {
+      position: absolute;
+      width: 145px;
+      height: 145px;
+      pointer-events: none;
+      flex-shrink: 0;
+    }
+    .date-corner--tl { top: -2px;    left: -2px;  }
+    .date-corner--tr { top: -2px;    right: -2px; transform: scaleX(-1); }
+    .date-corner--bl { bottom: -2px; left: -2px;  transform: scaleY(-1); }
+    .date-corner--br { bottom: -2px; right: -2px; transform: scale(-1, -1); }
+
+    /* ── بطاقة النص ── */
+    .date-card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 360px;
+      padding: 24px 36px 80px;
+      text-align: center;
+      direction: rtl;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* "وذلك بمشيئة الله تعالى" */
+    .date-bismi {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(17px, 4.4vw, 20px);
+      font-weight: 400;
+      color: #6F5962;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    /* فاصل زخرفي */
+    .date-sep {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #D4A8BE;
+      font-size: 10px;
+      letter-spacing: 4px;
+      margin-bottom: 22px;
+    }
+    .date-sep::before,
+    .date-sep::after {
+      content: '';
+      display: block;
+      width: 42px;
+      height: 1px;
+      background: linear-gradient(to var(--dsep, right), transparent, #D4A8BE, transparent);
+    }
+    .date-sep::before { --dsep: left; }
+
+    /* "يوم الجمعة" */
+    .date-day {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(25px, 6.5vw, 32px);
+      font-weight: 700;
+      color: #6F5962;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+    }
+
+    /* التاريخ الميلادي */
+    .date-gregorian {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(29px, 7.8vw, 38px);
+      font-weight: 700;
+      color: #C9829E;
+      line-height: 1.25;
+      direction: rtl;
+      unicode-bidi: isolate;
+      text-decoration: none;
+      margin-bottom: 18px;
+      letter-spacing: 0.01em;
+    }
+
+    /* "الموافق" */
+    .date-connector {
+      font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+      font-size: clamp(13px, 3.4vw, 15px);
+      font-weight: 300;
+      color: #9E8590;
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    /* التاريخ الهجري */
+    .date-hijri {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(24px, 6.2vw, 31px);
+      font-weight: 400;
+      color: #C9829E;
+      line-height: 1.25;
+      direction: rtl;
+      unicode-bidi: isolate;
+      text-decoration: none;
+      opacity: 0.85;
+      letter-spacing: 0.01em;
+    }
+
+    /* عزل الأرقام لمنع Safari من اكتشافها كروابط */
+    .date-num {
+      unicode-bidi: isolate;
+      direction: rtl;
+      color: inherit;
+      text-decoration: none;
+      display: inline;
+      font-style: normal;
+    }
+    .date-slash {
+      color: inherit;
+      text-decoration: none;
+      display: inline;
+      font-style: normal;
+      unicode-bidi: isolate;
+    }
+    .date-suffix {
+      color: inherit;
+      text-decoration: none;
+      display: inline;
+      font-style: normal;
+    }
+
+    /* ── حركة الظهور عبر IntersectionObserver ── */
+    .date-reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity   1.4s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #section-date.in-view .date-reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── شاشات صغيرة (iPhone SE) ── */
+    @media screen and (max-height: 700px) {
+      .date-bismi     { font-size: 15px; margin-bottom: 14px; }
+      .date-sep       { margin-bottom: 16px; }
+      .date-day       { font-size: 22px; margin-bottom: 8px; }
+      .date-gregorian { font-size: 26px; margin-bottom: 14px; }
+      .date-connector { font-size: 12px; margin-bottom: 6px; }
+      .date-hijri     { font-size: 21px; }
+      .date-corner    { width: 105px; height: 105px; }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .date-reveal { transition: opacity 0.3s ease; transform: none !important; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION 3 – العد التنازلي
+    ══════════════════════════════════════════════ */
+    #section-countdown {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      direction: rtl;
+      background: linear-gradient(
+        180deg,
+        #FAFAFA 0%,
+        #F7F7F7 50%,
+        #F3F3F3 100%
+      );
+    }
+
+    /* ── المحتوى ── */
+    .cd-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 44px 24px 80px;
+      gap: 30px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    /* "باقي على فرحتنا" */
+    .cd-title {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(26px, 7vw, 34px);
+      font-weight: 700;
+      color: #A66F87;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+      text-shadow: 0 1px 12px rgba(183, 122, 149, 0.18);
+    }
+
+    /* ── صف الخانات الأربع ── */
+    .cd-boxes {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: stretch;
+      gap: 10px;
+      width: 100%;
+    }
+
+    /* خانة واحدة */
+    .cd-box {
+      flex: 1;
+      min-width: 0;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #E7E1E4;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      padding: 14px 6px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    /* الرقم */
+    .cd-num {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(30px, 8.5vw, 42px);
+      font-weight: 500;
+      color: #C9829E;
+      line-height: 1.0;
+      letter-spacing: 0.02em;
+      text-shadow: 0 1px 8px rgba(201, 130, 158, 0.20);
+      font-variant-numeric: tabular-nums;
+      min-width: 2ch;
+      display: inline-block;
+      text-align: center;
+    }
+
+    /* اسم الوحدة */
+    .cd-label {
+      font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+      font-size: clamp(11px, 2.8vw, 13px);
+      font-weight: 300;
+      color: #8F6C7A;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+    }
+
+    /* رسالة انتهاء العد */
+    #cd-finished {
+      display: none;
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(24px, 6.5vw, 34px);
+      font-weight: 700;
+      color: #A66F87;
+      text-shadow: none;
+      line-height: 1.5;
+    }
+
+    /* "ننتظر حضوركم بكل الحب" */
+    .cd-footer {
+      font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+      font-size: clamp(14px, 3.8vw, 17px);
+      font-weight: 300;
+      color: #8C7A82;
+      letter-spacing: 0.03em;
+      line-height: 1.7;
+      text-shadow: none;
+    }
+
+    /* ── حركة الظهور (محفوظة كما هي) ── */
+    .cd-reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition:
+        opacity   1.2s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #section-countdown.in-view .cd-reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── iPhone SE وشاشات ضيقة ── */
+    @media screen and (max-width: 375px) {
+      .cd-content { gap: 22px; padding: 36px 16px 44px; }
+      .cd-title   { font-size: 22px; }
+      .cd-num     { font-size: 26px; }
+      .cd-label   { font-size: 10px; }
+      .cd-boxes   { gap: 7px; }
+      .cd-box     { padding: 10px 4px 8px; border-radius: 14px; }
+      .cd-footer  { font-size: 13px; }
+      .cd-corner  { width: 100px; height: 100px; }
+    }
+    @media screen and (max-height: 700px) {
+      .cd-content { gap: 20px; padding: 30px 20px 40px; }
+      .cd-title   { font-size: 22px; }
+      .cd-num     { font-size: 28px; }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .cd-reveal { transition: opacity 0.3s ease; transform: none !important; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION HINT — "اسحبي للأسفل" موحدة
+    ══════════════════════════════════════════════ */
+    .section-hint {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: max(28px, env(safe-area-inset-bottom, 28px));
+      pointer-events: none;
+    }
+
+    .hint-text {
+      font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #A66F87;
+      text-align: center;
+      direction: rtl;
+      white-space: nowrap;
+      margin: 0;
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .hint-arrow {
+      width: 22px;
+      height: 13px;
+      display: block;
+      animation: hintBounce 2.2s ease-in-out infinite;
+      opacity: 0.82;
+    }
+
+    @keyframes hintBounce {
+      0%, 100% { transform: translateY(0);   opacity: 0.70; }
+      50%       { transform: translateY(5px); opacity: 1.00; }
+    }
+
+    /* ظهور بالتزامن مع محتوى كل قسم */
+    #section-video .section-hint {
+      opacity: 0;
+      transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.65s;
+    }
+    #section-video.content-visible .section-hint { opacity: 1; }
+
+    #section-date .section-hint {
+      opacity: 0;
+      transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1) 1.05s;
+    }
+    #section-date.in-view .section-hint { opacity: 1; }
+
+    #section-countdown .section-hint {
+      opacity: 0;
+      transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.62s;
+    }
+    #section-countdown.in-view .section-hint { opacity: 1; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .hint-arrow { animation: none; }
+      #section-video .section-hint,
+      #section-date .section-hint,
+      #section-countdown .section-hint,
+      #section-details .section-hint { transition: opacity 0.3s ease; }
+    }
+
+    /* شاشات صغيرة */
+    @media screen and (max-width: 375px) {
+      .hint-text { font-size: 12px; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION 4 – تفاصيل الحفل
+    ══════════════════════════════════════════════ */
+    #section-details {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #FFFCFD;
+      direction: rtl;
+    }
+
+    /* ── غلاف المحتوى ── */
+    .details-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 340px;
+      padding: 52px 24px 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* ── عنوان القسم ── */
+    .details-title {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: clamp(24px, 7vw, 30px);
+      font-weight: 700;
+      color: #A66F87;
+      text-align: center;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── البطاقة ── */
+    .details-card {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #EFE7EA;
+      border-radius: 22px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+
+    /* ── الأيقونة ── */
+    .details-card-icon {
+      width: 44px;
+      height: 44px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    /* ── تسمية البطاقة ── */
+    .details-card-label {
+      font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: #5F4B55;
+      line-height: 1.5;
+      margin: 0;
+      opacity: 0.80;
+    }
+
+    /* ── قيمة البطاقة ── */
+    .details-card-value {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #5F4B55;
+      line-height: 1.3;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── حركة الظهور ── */
+    .details-reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition:
+        opacity   1.3s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #section-details.in-view .details-reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #section-details .section-hint {
+      opacity: 0;
+      transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.85s;
+    }
+    #section-details.in-view .section-hint { opacity: 1; }
+
+    /* ── شاشات صغيرة (ارتفاع) ── */
+    @media screen and (max-height: 700px) {
+      .details-content    { padding: 34px 20px 80px; gap: 16px; }
+      .details-card       { padding: 22px 20px; gap: 8px; }
+      .details-card-icon  { width: 36px; height: 36px; }
+      .details-card-value { font-size: 20px; }
+      .details-card-label { font-size: 14px; }
+    }
+    /* ── شاشات صغيرة (عرض ≤ 360px — iPhone SE وما دون) ── */
+    @media screen and (max-width: 360px) {
+      .details-content    { padding: 40px 16px 80px; max-width: 100%; }
+      .details-card       { padding: 20px 16px; }
+      .details-card-value { font-size: clamp(18px, 5.5vw, 22px); }
+      .cd-content         { max-width: 100%; padding: 36px 12px 44px; }
+      .date-card          { max-width: 100%; padding: 24px 20px 80px; }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .details-reveal        { transition: opacity 0.3s ease; transform: none !important; }
+      #section-details .section-hint { transition: opacity 0.3s ease; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION FOOTER – علامة LEQAA
+    ══════════════════════════════════════════════ */
+    #section-footer {
+      position: relative;
+      width: 100%;
+      background: #FFFCF8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 70px 20px 45px;
+      overflow: hidden;
+      direction: ltr;
+    }
+
+    /* ── فاصل زخرفي ── */
+    .footer-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .footer-divider-line {
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(to var(--fd, right), transparent, #D8B4C2);
+    }
+    .footer-divider-line:first-child { --fd: left; }
+    .footer-divider-diamond {
+      width: 7px;
+      height: 7px;
+      background: #D8B4C2;
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* ── DESIGNED & DEVELOPED BY ── */
+    .footer-by {
+      font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      color: #B99AA6;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 0 0 10px;
+      line-height: 1;
+    }
+
+    /* ── اسم LEQAA ── */
+    .footer-brand {
+      font-family: 'Cormorant Garamond', 'Playfair Display', 'Georgia', serif;
+      font-size: clamp(30px, 8vw, 38px);
+      font-weight: 600;
+      color: #B77A95;
+      letter-spacing: 0.30em;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 0 0 34px;
+      line-height: 1;
+    }
+
+    /* ── صف الأيقونات ── */
+    .footer-socials {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 36px;
+    }
+
+    /* رابط كل منصة */
+    .footer-social-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* الدائرة */
+    .footer-social-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid #E6CBD5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      transition: border-color 0.25s ease, transform 0.2s ease;
+    }
+    .footer-social-link:active .footer-social-circle {
+      border-color: #B77A95;
+      transform: scale(0.94);
+    }
+
+    /* الأيقونة SVG */
+    .footer-social-icon {
+      width: 22px;
+      height: 22px;
+      display: block;
+      color: #B77A95;
+    }
+
+    /* اسم المنصة */
+    .footer-social-name {
+      font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 300;
+      color: #B99AA6;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 0;
+      line-height: 1;
+    }
+
+    /* ── الزخرفة السفلية ── */
+    .footer-ornament {
+      display: block;
+      width: 110px;
+      height: 18px;
+      color: #E8D6DC;
+    }
+
+    /* ── حركة الظهور ── */
+    .footer-reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity   1.2s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #section-footer.in-view .footer-reveal { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .footer-reveal { transition: opacity 0.3s ease; transform: none !important; }
+    }
+
+    /* ══════════════════════════════════════
+       زر الصوت الثابت
+    ══════════════════════════════════════ */
+    #sound-btn {
+      position: fixed;
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      left: 18px;
+      z-index: 30;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid rgba(201, 130, 158, .28);
+      box-shadow: 0 6px 20px rgba(80, 50, 65, .12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #B77A95;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #sound-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #sound-btn:active {
+      transform: scale(0.90);
+    }
+    .sound-icon {
+      width: 22px;
+      height: 22px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+  </style>
+  <!-- خط Cormorant Garamond الأنيق -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════════
+       PAGE 1 — صفحة الختم
+  ══════════════════════════════════════════════ -->
+  <div id="page1">
+
+    <img
+      id="cover-img"
+      src="imges/img.png"
+      alt="دعوة تخرج حور"
+      draggable="false"
+    />
+
+    <!-- منطقة الختم والشريطة -->
+    <div
+      id="seal-zone"
+      class="hotspot"
+      role="button"
+      tabindex="0"
+      aria-label="اضغطي لفتح الدعوة"
+    ></div>
+
+    <!-- منطقة النص -->
+    <div
+      id="text-zone"
+      class="hotspot"
+      role="button"
+      tabindex="0"
+      aria-label="اضغطي لفتح الدعوة"
+    ></div>
+
+  </div><!-- #page1 -->
+
+
+  <!-- ══════════════════════════════════════════════
+       PAGE 2 — محتوى الدعوة
+  ══════════════════════════════════════════════ -->
+  <div id="page2">
+
+    <!-- ── القسم الأول: فيديو الخلفية ── -->
+    <section id="section-video" aria-label="مقدمة الدعوة">
+
+      <!-- فيديو الخلفية
+           - autoplay: يبدأ تلقائياً
+           - muted: مطلوب لـ Safari
+           - loop: يتكرر
+           - playsinline: يمنع الدخول للـ fullscreen على iOS
+           - preload="metadata": يحمّل البيانات فقط حتى تبدأ التعليمات
+      -->
+      <video
+        id="bg-video"
+        src="videos/13559935_3840_2160_24fps.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        disablepictureinpicture
+        x-webkit-airplay="deny"
+      ></video>
+
+      <!-- طبقة التدرج الشفافة -->
+      <div class="video-overlay" aria-hidden="true"></div>
+
+      <!-- النصوص — كل عنصر له transition-delay خاص به -->
+      <div class="video-content">
+
+        <!-- المجموعة الأولى -->
+        <p class="text-intro text-animate" style="transition-delay: 0.15s">
+          تعالت في بيتنا نغماتُ الفرح<br />
+          بتخرّج أنيسةِ أرواحنا
+        </p>
+
+        <!-- المجموعة الثانية -->
+        <p class="text-reason text-animate" style="transition-delay: 0.42s">
+          ولأن الفرح يزدان<br />
+          بحضور من نحب
+        </p>
+
+        <!-- المجموعة الثالثة -->
+        <p class="text-invite text-animate" style="transition-delay: 0.65s">
+          يسرّنا دعوتكم<br />
+          لمشاركتنا هذه المناسبة
+        </p>
+
+        <!-- اسم الحفل -->
+        <p class="text-event text-animate" style="transition-delay: 0.88s">
+          حفل تخرّج ابنتنا
+        </p>
+
+        <!-- الاسم -->
+        <h1 class="hero-name text-animate" style="transition-delay: 1.08s">حور</h1>
+
+      </div><!-- .video-content -->
+
+      <!-- اسحبي للأسفل -->
+      <div class="section-hint" aria-hidden="true">
+        <p class="hint-text">اسحبي للأسفل</p>
+        <svg class="hint-arrow" viewBox="0 0 22 13" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="1,1 11,12 21,1" stroke="#A66F87" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+
+    </section><!-- #section-video -->
+
+    <!-- ── القسم الثاني: موعد الحفل ── -->
+    <section id="section-date" aria-label="موعد حفل التخرج">
+
+      <!-- زخرفة: أعلى يسار -->
+      <!-- ── بطاقة النص ── -->
+      <div class="date-card">
+
+        <!-- وذلك بمشيئة الله تعالى -->
+        <p class="date-bismi date-reveal" style="transition-delay: 0.10s">
+          وذلك بمشيئة الله تعالى
+        </p>
+
+        <!-- فاصل -->
+        <div class="date-sep date-reveal" style="transition-delay: 0.28s" aria-hidden="true">
+          ✦
+        </div>
+
+        <!-- يوم الجمعة -->
+        <p class="date-day date-reveal" style="transition-delay: 0.46s">
+          يوم الجمعة
+        </p>
+
+        <!--
+          التاريخ الميلادي — كل رقم في span مستقل لمنع Safari
+          من اكتشافه كرابط تاريخ. format-detection في head يوفر
+          الحماية الأساسية، والـ spans توفر طبقة إضافية.
+        -->
+        <p class="date-gregorian date-reveal" style="transition-delay: 0.62s" dir="rtl">
+          <span class="date-num">٧</span><span class="date-slash"> / </span><span class="date-num">٨</span><span class="date-slash"> / </span><span class="date-num">٢٠٢٦</span><span class="date-suffix"> م</span>
+        </p>
+
+        <!-- الموافق -->
+        <p class="date-connector date-reveal" style="transition-delay: 0.80s">
+          الموافق
+        </p>
+
+        <!-- التاريخ الهجري -->
+        <p class="date-hijri date-reveal" style="transition-delay: 0.96s" dir="rtl">
+          <span class="date-num">٢٤</span><span class="date-slash"> / </span><span class="date-num">٢</span><span class="date-slash"> / </span><span class="date-num">١٤٤٨</span><span class="date-suffix"> هـ</span>
+        </p>
+
+      </div><!-- .date-card -->
+
+      <!-- اسحبي للأسفل -->
+      <div class="section-hint" aria-hidden="true">
+        <p class="hint-text">اسحبي للأسفل</p>
+        <svg class="hint-arrow" viewBox="0 0 22 13" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="1,1 11,12 21,1" stroke="#A66F87" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+
+    </section><!-- #section-date -->
+
+    <!-- ── القسم الثالث: العد التنازلي ── -->
+    <section id="section-countdown" aria-label="العد التنازلي لحفل التخرج">
+
+      <!-- ── المحتوى ── -->
+      <div class="cd-content">
+
+        <!-- العنوان -->
+        <h2 class="cd-title cd-reveal" style="transition-delay: 0.10s">
+          باقي على فرحتنا
+        </h2>
+
+        <!-- الخانات الأربع -->
+        <div class="cd-boxes cd-reveal" id="cd-boxes" style="transition-delay: 0.30s">
+
+          <!-- أيام -->
+          <div class="cd-box">
+            <span class="cd-num" id="cd-days">00</span>
+            <span class="cd-label">يوم</span>
+          </div>
+
+          <!-- ساعات -->
+          <div class="cd-box">
+            <span class="cd-num" id="cd-hours">00</span>
+            <span class="cd-label">ساعة</span>
+          </div>
+
+          <!-- دقائق -->
+          <div class="cd-box">
+            <span class="cd-num" id="cd-minutes">00</span>
+            <span class="cd-label">دقيقة</span>
+          </div>
+
+          <!-- ثواني -->
+          <div class="cd-box">
+            <span class="cd-num" id="cd-seconds">00</span>
+            <span class="cd-label">ثانية</span>
+          </div>
+
+        </div><!-- #cd-boxes -->
+
+        <!-- رسالة انتهاء العد (مخفية حتى ينتهي الوقت) -->
+        <p id="cd-finished" aria-live="polite">اليوم فرحتنا 🤍</p>
+
+        <!-- التذييل -->
+        <p class="cd-footer cd-reveal" style="transition-delay: 0.50s">
+          ننتظر حضوركم بكل الحب
+        </p>
+
+      </div><!-- .cd-content -->
+
+      <!-- اسحبي للأسفل -->
+      <div class="section-hint" aria-hidden="true">
+        <p class="hint-text">اسحبي للأسفل</p>
+        <svg class="hint-arrow" viewBox="0 0 22 13" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="1,1 11,12 21,1" stroke="#A66F87" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+
+    </section><!-- #section-countdown -->
+
+    <!-- ── القسم الرابع: تفاصيل الحفل ── -->
+    <section id="section-details" aria-label="تفاصيل حفل التخرج">
+
+      <div class="details-content">
+
+        <!-- عنوان القسم -->
+        <h2 class="details-title details-reveal" style="transition-delay: 0.10s">
+          تفاصيل الحفل
+        </h2>
+
+        <!-- بطاقة الوقت -->
+        <div class="details-card details-reveal" style="transition-delay: 0.30s">
+          <!-- أيقونة الساعة — عقارب عند 9:00 -->
+          <svg class="details-card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="22" cy="22" r="17" stroke="#C9829E" stroke-width="1.8"/>
+            <line x1="22" y1="22" x2="8"  y2="22" stroke="#C9829E" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="22" y1="22" x2="22" y2="8"  stroke="#C9829E" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="22" cy="22" r="2" fill="#C9829E"/>
+          </svg>
+          <p class="details-card-label">الوقت</p>
+          <p class="details-card-value">٩:٠٠ مساءً</p>
+        </div>
+
+        <!-- بطاقة المكان -->
+        <div class="details-card details-reveal" style="transition-delay: 0.52s">
+          <!-- أيقونة المنزل -->
+          <svg class="details-card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 22 L22 7 L38 22" stroke="#C9829E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="11" y="22" width="22" height="16" rx="2" stroke="#C9829E" stroke-width="1.8"/>
+            <path d="M19 38 L19 30 Q22 27 25 30 L25 38" stroke="#C9829E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="details-card-label">مكان الاحتفال</p>
+          <p class="details-card-value">منزلنا</p>
+        </div>
+
+      </div><!-- .details-content -->
+
+    </section><!-- #section-details -->
+
+    <!-- ══════════════════════════════════════
+         القسم الخامس — الفوتر / الختام
+    ══════════════════════════════════════ -->
+    <footer id="section-footer" aria-label="تصميم وتطوير">
+
+      <!-- فاصل زخرفي -->
+      <div class="footer-divider footer-reveal" style="transition-delay:0.10s" aria-hidden="true">
+        <span class="footer-divider-line"></span>
+        <span class="footer-divider-diamond"></span>
+        <span class="footer-divider-line"></span>
+      </div>
+
+      <!-- DESIGNED & DEVELOPED BY -->
+      <p class="footer-by footer-reveal" style="transition-delay:0.22s">Designed &amp; Developed By</p>
+
+      <!-- اسم العلامة -->
+      <p class="footer-brand footer-reveal" style="transition-delay:0.34s">LEQAA</p>
+
+      <!-- الشبكات الاجتماعية -->
+      <div class="footer-socials footer-reveal" style="transition-delay:0.48s">
+
+        <!-- تيك توك -->
+        <a class="footer-social-link"
+           href="https://www.tiktok.com/@byleqaa"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="TikTok">
+          <span class="footer-social-circle">
+            <svg class="footer-social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.07a8.16 8.16 0 0 0 4.77 1.52V7.16a4.85 4.85 0 0 1-1-.47z"/>
+            </svg>
+          </span>
+          <p class="footer-social-name">TikTok</p>
+        </a>
+
+        <!-- إنستقرام -->
+        <a class="footer-social-link"
+           href="https://www.instagram.com/byleqaa1/"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Instagram">
+          <span class="footer-social-circle">
+            <svg class="footer-social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4.5"/>
+              <circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/>
+            </svg>
+          </span>
+          <p class="footer-social-name">Instagram</p>
+        </a>
+
+      </div><!-- .footer-socials -->
+
+      <!-- زخرفة سفلية -->
+      <svg class="footer-ornament footer-reveal" style="transition-delay:0.62s"
+           viewBox="0 0 110 18" fill="none" xmlns="http://www.w3.org/2000/svg"
+           aria-hidden="true">
+        <path d="M5 9 Q15 2 25 9 Q35 16 45 9 Q55 2 65 9 Q75 16 85 9 Q95 2 105 9"
+              stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        <circle cx="5"   cy="9" r="1.5" fill="currentColor"/>
+        <circle cx="55"  cy="9" r="1.5" fill="currentColor"/>
+        <circle cx="105" cy="9" r="1.5" fill="currentColor"/>
+      </svg>
+
+    </footer><!-- #section-footer -->
+
+  </div><!-- #page2 -->
+
+
+  <!-- الموسيقى -->
+  <audio id="invitationMusic" preload="auto" loop>
+    <source src="sound/sound.m4a" type="audio/mp4">
+  </audio>
+
+  <!-- زر الصوت -->
+  <button
+    id="sound-btn"
+    type="button"
+    aria-label="كتم الصوت"
+    title="كتم الصوت">
+    <!-- أيقونة: صوت يعمل -->
+    <svg id="icon-sound-on" class="sound-icon" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round" aria-hidden="true">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
+               fill="currentColor" stroke="none"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+    </svg>
+    <!-- أيقونة: صوت مكتوم -->
+    <svg id="icon-sound-off" class="sound-icon" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round" aria-hidden="true" style="display:none">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
+               fill="currentColor" stroke="none"/>
+      <line x1="23" y1="9"  x2="17" y2="15"/>
+      <line x1="17" y1="9"  x2="23" y2="15"/>
+    </svg>
+  </button>
+
+  <!-- ══════════════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════════════ -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── مراجع العناصر ── */
+    var page1       = document.getElementById('page1');
+    var page2       = document.getElementById('page2');
+    var coverImg    = document.getElementById('cover-img');
+    var sealZone    = document.getElementById('seal-zone');
+    var textZone    = document.getElementById('text-zone');
+    var secVideo    = document.getElementById('section-video');
+    var bgVideo     = document.getElementById('bg-video');
+    var music       = document.getElementById('invitationMusic');
+    var soundBtn    = document.getElementById('sound-btn');
+    var iconSoundOn = document.getElementById('icon-sound-on');
+    var iconSoundOff= document.getElementById('icon-sound-off');
+
+    /* ════════════════════════════════════════
+       تشغيل الموسيقى — مرة واحدة فقط
+    ════════════════════════════════════════ */
+    var musicStarted = false;
+
+    function playMusic() {
+      if (musicStarted || !music) return;
+      musicStarted = true;
+      music.currentTime = 0;
+      var playPromise = music.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function (error) {
+          console.warn('Music playback was blocked:', error);
+        });
+      }
+    }
+
+    /* ════════════════════════════════════════
+       زر الصوت — كتم / تشغيل
+    ════════════════════════════════════════ */
+    if (soundBtn && music) {
+      soundBtn.addEventListener('click', function () {
+        music.muted = !music.muted;
+        if (music.muted) {
+          soundBtn.setAttribute('aria-label', 'تشغيل الصوت');
+          soundBtn.setAttribute('title', 'تشغيل الصوت');
+          iconSoundOn.style.display  = 'none';
+          iconSoundOff.style.display = 'block';
+        } else {
+          soundBtn.setAttribute('aria-label', 'كتم الصوت');
+          soundBtn.setAttribute('title', 'كتم الصوت');
+          iconSoundOn.style.display  = 'block';
+          iconSoundOff.style.display = 'none';
+        }
+      });
+    }
+
+    /* ════════════════════════════════════════
+       تحديد مواضع مناطق الضغط ديناميكياً
+       بناءً على الأبعاد الحقيقية للصورة
+    ════════════════════════════════════════ */
+    var SEAL = { cx: 0.500, cy: 0.400, w: 0.520, h: 0.400 };
+    var TEXT = { cx: 0.500, cy: 0.645, w: 0.720, h: 0.090 };
+
+    function placeHotspots() {
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      var iw = coverImg.naturalWidth;
+      var ih = coverImg.naturalHeight;
+      if (!iw || !ih) return;
+
+      var imgAspect = iw / ih;
+      var vpAspect  = vw / vh;
+      var rW, rH, oX, oY;
+
+      if (vpAspect > imgAspect) {
+        /* Viewport أعرض من الصورة → نملأ العرض */
+        rW = vw; rH = vw / imgAspect;
+        oX = 0;  oY = (vh - rH) / 2;
+      } else {
+        /* Viewport أطول → نملأ الارتفاع */
+        rH = vh; rW = vh * imgAspect;
+        oX = (vw - rW) / 2; oY = 0;
+      }
+
+      /* تحديث transform-origin ليبقى فوق الختم */
+      var ox = ((oX + rW * 0.50) / vw * 100).toFixed(2);
+      var oy = ((oY + rH * 0.38) / vh * 100).toFixed(2);
+      coverImg.style.transformOrigin = ox + '% ' + oy + '%';
+
+      function applyZone(el, z) {
+        var w = rW * z.w;
+        var h = Math.max(rH * z.h, 44);
+        el.style.left   = (oX + rW * z.cx - w / 2) + 'px';
+        el.style.top    = (oY + rH * z.cy - h / 2) + 'px';
+        el.style.width  = w + 'px';
+        el.style.height = h + 'px';
+      }
+
+      applyZone(sealZone, SEAL);
+      applyZone(textZone, TEXT);
+    }
+
+    /* تشغيل بعد تحميل الصورة (أو فوراً إذا كانت محملة) */
+    if (coverImg.complete && coverImg.naturalWidth) {
+      placeHotspots();
+    } else {
+      coverImg.addEventListener('load', placeHotspots);
+    }
+    window.addEventListener('resize', placeHotspots);
+    window.addEventListener('orientationchange', function () {
+      setTimeout(placeHotspots, 150);
+    });
+
+    /* ════════════════════════════════════════
+       تشغيل الفيديو — مع معالجة Promise
+    ════════════════════════════════════════ */
+    function startVideo() {
+      bgVideo.muted = true; /* iOS يشترط muted */
+      var p = bgVideo.play();
+      if (p !== undefined) {
+        p.catch(function () {
+          /*
+            إذا منع المتصفح التشغيل التلقائي،
+            ننتظر أي لمس قادم من المستخدم
+          */
+          function retryOnTouch() {
+            bgVideo.play().catch(function () {});
+            document.removeEventListener('touchstart', retryOnTouch);
+            document.removeEventListener('click',      retryOnTouch);
+          }
+          document.addEventListener('touchstart', retryOnTouch, { once: true });
+          document.addEventListener('click',      retryOnTouch, { once: true });
+        });
+      }
+    }
+
+    /* ════════════════════════════════════════
+       انتقال: صفحة الختم → قسم الفيديو
+    ════════════════════════════════════════ */
+    var transitioning = false;
+
+    function openInvitation() {
+      if (transitioning) return;
+      transitioning = true;
+
+      /* شغّل الموسيقى مباشرة عند الضغط (داخل حدث المستخدم) */
+      playMusic();
+
+      /* أظهر زر الصوت */
+      if (soundBtn) soundBtn.classList.add('visible');
+
+      /*
+        1. جمّد حركة التنفس عند موضعها الحالي
+           (بدون قفزة مرئية) ثم كبّر الختم
+      */
+      var currentMatrix = window.getComputedStyle(coverImg).transform;
+      coverImg.style.animation  = 'none';
+      coverImg.style.transform  = currentMatrix;
+      coverImg.style.transition = 'none';
+      coverImg.getBoundingClientRect(); /* flush */
+      coverImg.style.transition = 'transform 0.52s cubic-bezier(0.34, 1.25, 0.64, 1)';
+      coverImg.style.transform  = 'scale(1.07)';
+
+      /* 2. بعد لحظة: ابدأ الـ Fade Out لصفحة الختم */
+      setTimeout(function () {
+        page1.classList.add('fade-out');
+
+        /* 3. بعد اكتمال الـ Fade Out: أظهر قسم الفيديو */
+        setTimeout(function () {
+          page2.classList.add('fade-in');
+
+          /* 4. شغّل الفيديو */
+          startVideo();
+
+          /* 5. بعد بداية الظهور: شغّل حركات النص */
+          setTimeout(function () {
+            secVideo.classList.add('content-visible');
+          }, 450);
+
+        }, 1850); /* يتطابق مع مدة transition صفحة الختم */
+
+      }, 480); /* وقت كافٍ لرؤية تكبير الختم */
+    }
+
+    /* ── ربط الأحداث ── */
+    function onTap(e) {
+      e.preventDefault();
+      openInvitation();
+    }
+
+    [sealZone, textZone].forEach(function (el) {
+      el.addEventListener('click',    onTap);
+      el.addEventListener('touchend', onTap, { passive: false });
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openInvitation();
+        }
+      });
+    });
+
+    /* ════════════════════════════════════════
+       منع التمرير / bounce فقط على صفحة الختم
+    ════════════════════════════════════════ */
+    document.addEventListener('touchmove', function (e) {
+      if (!page1.classList.contains('fade-out')) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    /* منع القائمة السياقية عند الضغط الطويل */
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    });
+
+    /* ════════════════════════════════════════
+       IntersectionObserver — القسم الثاني
+       يُشغَّل مرة واحدة عند ظهور القسم
+    ════════════════════════════════════════ */
+    var secDate = document.getElementById('section-date');
+
+    if (secDate) {
+      if ('IntersectionObserver' in window) {
+        var dateObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              secDate.classList.add('in-view');
+              dateObserver.unobserve(secDate); /* مرة واحدة فقط */
+            }
+          });
+        }, {
+          threshold: 0.18  /* يبدأ عند ظهور 18% من القسم */
+        });
+        dateObserver.observe(secDate);
+      } else {
+        /* Fallback: أظهر مباشرة للمتصفحات القديمة */
+        secDate.classList.add('in-view');
+      }
+    }
+
+    /* ════════════════════════════════════════
+       IntersectionObserver — القسم الثالث
+    ════════════════════════════════════════ */
+    var secCountdown = document.getElementById('section-countdown');
+
+    if (secCountdown) {
+      if ('IntersectionObserver' in window) {
+        var cdObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              secCountdown.classList.add('in-view');
+              cdObserver.unobserve(secCountdown);
+            }
+          });
+        }, { threshold: 0.18 });
+        cdObserver.observe(secCountdown);
+      } else {
+        secCountdown.classList.add('in-view');
+      }
+    }
+
+    /* ════════════════════════════════════════
+       IntersectionObserver — القسم الرابع
+    ════════════════════════════════════════ */
+    var secDetails = document.getElementById('section-details');
+
+    if (secDetails) {
+      if ('IntersectionObserver' in window) {
+        var detailsObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              secDetails.classList.add('in-view');
+              detailsObserver.unobserve(secDetails);
+            }
+          });
+        }, { threshold: 0.18 });
+        detailsObserver.observe(secDetails);
+      } else {
+        secDetails.classList.add('in-view');
+      }
+    }
+
+    /* ════════════════════════════════════════
+       IntersectionObserver — القسم الخامس (الفوتر)
+    ════════════════════════════════════════ */
+    var secFooter = document.getElementById('section-footer');
+
+    if (secFooter) {
+      if ('IntersectionObserver' in window) {
+        var footerObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              secFooter.classList.add('in-view');
+              footerObserver.unobserve(secFooter);
+            }
+          });
+        }, { threshold: 0.18 });
+        footerObserver.observe(secFooter);
+      } else {
+        secFooter.classList.add('in-view');
+      }
+    }
+
+    /* ════════════════════════════════════════
+       العد التنازلي — 7 أغسطس 2026 (توقيت السعودية UTC+3)
+    ════════════════════════════════════════ */
+    (function () {
+      var TARGET   = new Date('2026-08-07T00:00:00+03:00').getTime();
+      var elDays   = document.getElementById('cd-days');
+      var elHours  = document.getElementById('cd-hours');
+      var elMins   = document.getElementById('cd-minutes');
+      var elSecs   = document.getElementById('cd-seconds');
+      var elBoxes  = document.getElementById('cd-boxes');
+      var elFinish = document.getElementById('cd-finished');
+
+      if (!elDays) return;
+
+      function pad(n) {
+        return (n < 10 ? '0' : '') + n;
+      }
+
+      function tick() {
+        var diff = TARGET - Date.now();
+
+        if (diff <= 0) {
+          /* انتهى العد */
+          elBoxes.style.display  = 'none';
+          elFinish.style.display = 'block';
+          return false; /* أوقف الـ interval */
+        }
+
+        elDays.textContent  = pad(Math.floor(diff / 86400000));
+        elHours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+        elMins.textContent  = pad(Math.floor((diff % 3600000)  / 60000));
+        elSecs.textContent  = pad(Math.floor((diff % 60000)    / 1000));
+
+        return true;
+      }
+
+      /* تحديث أولي فوري */
+      if (!tick()) return;
+
+      /* ثم كل ثانية */
+      var cdTimer = setInterval(function () {
+        if (!tick()) clearInterval(cdTimer);
+      }, 1000);
+    }());
+
+  }());
+  </script>
+
+</body>
+</html>
