@@ -1101,21 +1101,19 @@
     <!-- ── القسم الأول: فيديو الخلفية ── -->
     <section id="section-video" aria-label="مقدمة الدعوة">
 
-      <!-- فيديو الخلفية
-           - autoplay: يبدأ تلقائياً
-           - muted: مطلوب لـ Safari
-           - loop: يتكرر
-           - playsinline: يمنع الدخول للـ fullscreen على iOS
-           - preload="metadata": يحمّل البيانات فقط حتى تبدأ التعليمات
+      <!-- فيديو الخلفية — نسخة 1080p محسّنة للويب (7MB)
+           poster: أول إطار يظهر فوراً أثناء التحميل
+           preload="auto": يبدأ التخزين المؤقت مع صفحة الختم
       -->
       <video
         id="bg-video"
-        src="videos/13559935_3840_2160_24fps.mp4"
+        src="videos/bg_1080p.mp4"
+        poster="imges/video-poster.jpg"
         autoplay
         muted
         loop
         playsinline
-        preload="metadata"
+        preload="auto"
         disablepictureinpicture
         x-webkit-airplay="deny"
       ></video>
@@ -1531,25 +1529,39 @@
     });
 
     /* ════════════════════════════════════════
-       تشغيل الفيديو — مع معالجة Promise
+       تحميل مسبق للفيديو أثناء صفحة الختم
+       (preload="auto" في HTML + استدعاء load()
+        يبدأ التخزين المؤقت قبل أن يضغط المستخدم)
+    ════════════════════════════════════════ */
+    bgVideo.muted = true;
+    bgVideo.load();
+
+    /* ════════════════════════════════════════
+       تشغيل الفيديو — فوري أو بمجرد الاستعداد
     ════════════════════════════════════════ */
     function startVideo() {
-      bgVideo.muted = true; /* iOS يشترط muted */
-      var p = bgVideo.play();
-      if (p !== undefined) {
-        p.catch(function () {
-          /*
-            إذا منع المتصفح التشغيل التلقائي،
-            ننتظر أي لمس قادم من المستخدم
-          */
-          function retryOnTouch() {
-            bgVideo.play().catch(function () {});
-            document.removeEventListener('touchstart', retryOnTouch);
-            document.removeEventListener('click',      retryOnTouch);
-          }
-          document.addEventListener('touchstart', retryOnTouch, { once: true });
-          document.addEventListener('click',      retryOnTouch, { once: true });
-        });
+      function doPlay() {
+        var p = bgVideo.play();
+        if (p !== undefined) {
+          p.catch(function () {
+            /* Safari/Chrome منع التشغيل التلقائي — ننتظر لمسة */
+            function retryOnTouch() {
+              bgVideo.play().catch(function () {});
+            }
+            document.addEventListener('touchstart', retryOnTouch, { once: true });
+            document.addEventListener('click',      retryOnTouch, { once: true });
+          });
+        }
+      }
+
+      /* readyState 3=HAVE_FUTURE_DATA, 4=HAVE_ENOUGH_DATA */
+      if (bgVideo.readyState >= 3) {
+        doPlay();
+      } else {
+        /* الفيديو لم يُحمَّل بعد — شغّله فور استعداده */
+        bgVideo.addEventListener('canplay', doPlay, { once: true });
+        /* حاول التشغيل الآن أيضاً — المتصفح سيؤجل تلقائياً */
+        doPlay();
       }
     }
 
@@ -1567,6 +1579,12 @@
 
       /* أظهر زر الصوت */
       if (soundBtn) soundBtn.classList.add('visible');
+
+      /*
+        شغّل الفيديو فوراً عند الضغط — داخل حدث المستخدم
+        بحيث يكون قد بدأ قبل أن تنتهي حركة الانتقال
+      */
+      startVideo();
 
       /*
         1. جمّد حركة التنفس عند موضعها الحالي
@@ -1588,10 +1606,7 @@
         setTimeout(function () {
           page2.classList.add('fade-in');
 
-          /* 4. شغّل الفيديو */
-          startVideo();
-
-          /* 5. بعد بداية الظهور: شغّل حركات النص */
+          /* 4. شغّل حركات النص بعد لحظة من الظهور */
           setTimeout(function () {
             secVideo.classList.add('content-visible');
           }, 450);
